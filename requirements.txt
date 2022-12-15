@@ -1,0 +1,3 @@
+amanobot
+asyncio
+sqlite3
