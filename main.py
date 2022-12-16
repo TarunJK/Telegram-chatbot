@@ -5,13 +5,17 @@ from amanobot.aio.loop import MessageLoop
 from amanobot.namedtuple import ReplyKeyboardMarkup, ReplyKeyboardRemove
 import sqlite3
 from datetime import date
+
 token = "5823459380:AAEEjXYYb-1s_Ifir7rEDCQV2We0mkuikvI"                                                
 bot = amanobot.aio.Bot(token)
+
 conn = sqlite3.connect("users.db")
 cur = conn.cursor()
-print("connected to db file")
+print("connected to db...")
+
 queue = []
 occupied = {}
+
 async def handle(msg):
   id = msg['chat']['id']
   if 'text' in msg:
@@ -115,9 +119,10 @@ async def handle(msg):
     keyboard = ReplyKeyboardMarkup(keyboard=[['/Male'],['/Female'],['/Neither']], resize_keyboard=True, one_time_keyboard=True)
     await bot.sendMessage(id, "🤖: _Please state your gender._ ", parse_mode= 'Markdown', reply_markup=keyboard)
   elif text == "/premium":
-    await bot.sendMessage(id, "🤖: _Premium users will be allowed to choose the gender the want to match with. This feature is currently unavailable but please look forward to it in a couple of days. _", parse_mode= 'Markdown')
+    await bot.sendMessage(id, "🤖: _Premium users will be allowed to choose the gender they want to match with. This feature is currently unavailable but please look forward to it in a couple of days. _", parse_mode= 'Markdown')
   else :
     await bot.sendMessage(occupied[id], text)
+
 loop = asyncio.get_event_loop()
 loop.create_task(MessageLoop(bot,handle).run_forever())
 print('Listening ...')
