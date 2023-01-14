@@ -3,14 +3,15 @@ import random
 import asyncio
 from amanobot.aio.loop import MessageLoop
 from amanobot.namedtuple import ReplyKeyboardMarkup, ReplyKeyboardRemove
-import sqlite3
+import psycopg2
 from datetime import date
 
-token = "5823459380:AAEEjXYYb-1s_Ifir7rEDCQV2We0mkuikvI"                                                
+token = "5823459380:AAEEjXYYb-1s_Ifir7rEDCQV2We0mkuikvI"   
+DB_URI=""
 bot = amanobot.aio.Bot(token)
 
-conn = sqlite3.connect("users.db")
-cur = conn.cursor()
+conn = psycopg2.connect(DB_URI,sslmode="require")
+cur = psycopg2.cursor()
 print("connected to db...")
 
 queue = []
