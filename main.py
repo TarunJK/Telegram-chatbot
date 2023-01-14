@@ -11,7 +11,7 @@ DB_URI="postgresql://postgres:P1zFD7DtHd9ggJDBHvJT@containers-us-west-43.railway
 bot = amanobot.aio.Bot(token)
 
 conn = psycopg2.connect(DB_URI,sslmode="require")
-cur = psycopg2.cursor()
+cur = conn.cursor()
 print("connected to db...")
 
 queue = []
