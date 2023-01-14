@@ -58,16 +58,14 @@ async def handle(msg):
     await bot.sendMessage(id, "🤖: _Hello new user. Please state your gender._ ", parse_mode= 'Markdown', reply_markup=keyboard)
   if text == "/Male" or text == '/Female' or text == '/Neither':
     ReplyKeyboardRemove(remove_keyboard = True)
-    indb=cur.execute("SELECT uid FROM userdata WHERE uid=?",(int(id),)).fetchall()
+    indb=cur.execute(f"SELECT uid FROM userdata WHERE uid = {int(id)}").fetchone()
     gender = text[1]
     if not indb:
-      cur.execute("INSERT INTO userdata VALUES (?,?,0,'N',?)",(int(id),gender,str(date.today())))
+      cur.execute("INSERT INTO userdata VALUES (%s,%s,0,'N',%s)",(int(id),gender,str(date.today())))
       await bot.sendMessage(id, "🤖: _Thank you. You can now start chatting using menu option Start new chat🟢. Have fun. _", parse_mode= 'Markdown',reply_markup=ReplyKeyboardRemove(remove_keyboard = True))
-      #print(cur.execute("SELECT * FROM userdata").fetchall())
     else:
-      cur.execute("UPDATE userdata SET gender=? WHERE uid=?",(gender,int(id)))
+      cur.execute("UPDATE userdata SET gender=%s WHERE uid=%s",(gender,int(id)))
       await bot.sendMessage(id, "🤖:_Gender has been changed._", parse_mode= 'Markdown',reply_markup=ReplyKeyboardRemove(remove_keyboard = True))
-      #print(cur.execute("SELECT * FROM userdata").fetchall())
   elif text == "/new" and id not in queue and id not in occupied:
     await bot.sendMessage(id, "🤖: _Please wait...finding partner..._", parse_mode= 'Markdown')
     queue.append(id)
