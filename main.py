@@ -7,7 +7,7 @@ import psycopg2
 from datetime import date
 
 token = "5823459380:AAEEjXYYb-1s_Ifir7rEDCQV2We0mkuikvI"   
-DB_URI=""
+DB_URI="postgresql://postgres:P1zFD7DtHd9ggJDBHvJT@containers-us-west-43.railway.app:8037/railway"
 bot = amanobot.aio.Bot(token)
 
 conn = psycopg2.connect(DB_URI,sslmode="require")
