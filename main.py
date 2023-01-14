@@ -6,7 +6,7 @@ from amanobot.namedtuple import ReplyKeyboardMarkup, ReplyKeyboardRemove
 import psycopg2
 from datetime import date
 
-token = "5823459380:AAEEjXYYb-1s_Ifir7rEDCQV2We0mkuikvI" 
+token = "5823459380:AAFFmFFxtyfuzqRpCQAGE0MhxoeZ4oDxpU0" 
 DB_URI="postgresql://postgres:P1zFD7DtHd9ggJDBHvJT@containers-us-west-43.railway.app:8037/railway"
 bot = amanobot.aio.Bot(token)
 
@@ -58,13 +58,16 @@ async def handle(msg):
     await bot.sendMessage(id, "🤖: _Hello new user. Please state your gender._ ", parse_mode= 'Markdown', reply_markup=keyboard)
   if text == "/Male" or text == '/Female' or text == '/Neither':
     ReplyKeyboardRemove(remove_keyboard = True)
-    indb=cur.execute(f"SELECT uid FROM userdata WHERE uid = {int(id)}").fetchone()
+    intid = int(id)
+    indb=cur.execute(f"SELECT uid FROM userdata WHERE uid = {intid}").fetchone()
     gender = text[1]
     if not indb:
-      cur.execute("INSERT INTO userdata VALUES (%s,%s,0,'N',%s)",(int(id),gender,str(date.today())))
+      cur.execute("INSERT INTO userdata VALUES (%s,%s,0,'N',%s)",(intid,gender,str(date.today())))
+      cur.commit()
       await bot.sendMessage(id, "🤖: _Thank you. You can now start chatting using menu option Start new chat🟢. Have fun. _", parse_mode= 'Markdown',reply_markup=ReplyKeyboardRemove(remove_keyboard = True))
     else:
-      cur.execute("UPDATE userdata SET gender=%s WHERE uid=%s",(gender,int(id)))
+      cur.execute("UPDATE userdata SET gender=%s WHERE uid=%s",(gender,intid))
+      cur.commit()
       await bot.sendMessage(id, "🤖:_Gender has been changed._", parse_mode= 'Markdown',reply_markup=ReplyKeyboardRemove(remove_keyboard = True))
   elif text == "/new" and id not in queue and id not in occupied:
     await bot.sendMessage(id, "🤖: _Please wait...finding partner..._", parse_mode= 'Markdown')
